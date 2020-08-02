@@ -1,0 +1,95 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+
+  ext {
+    ver = [
+        cucumber                  : '6.2.2',
+        lombok                    : '1.18.12',
+        springBoot                : '2.3.2.RELEASE',
+        springdoc                 : '1.4.3',
+        archUnit                  : '1.1.1',
+        springDependencyManagement: '1.0.9.RELEASE',
+        findbugsJsr305            : '3.0.2',
+        jacoco                    : '0.8.5'
+    ]
+  }
+
+  dependencies {
+    classpath group: 'io.spring.gradle', name: 'dependency-management-plugin', version: ver.springDependencyManagement
+    classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: ver.springBoot
+  }
+}
+
+allprojects {
+  group = 'org.dfm'
+  version = '1.0-SNAPSHOT'
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+
+  apply plugin: 'base'
+  apply from: "$rootDir/gradle/jacoco.gradle"
+
+
+  jacoco {
+    toolVersion = ver.jacoco
+  }
+}
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'io.spring.dependency-management'
+  apply plugin: 'java-library'
+
+  dependencies {
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: ver.findbugsJsr305
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-runner'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-engine'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-commons'
+    testImplementation group: 'org.mockito', name: 'mockito-core'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
+    testImplementation group: 'io.cucumber', name: 'cucumber-java8', version: ver.cucumber
+    testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: ver.cucumber
+    testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: ver.cucumber
+    testImplementation group: 'org.assertj', name: 'assertj-core'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: ver.lombok
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: ver.lombok
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: ver.lombok
+  }
+
+  dependencyManagement {
+    imports {
+      mavenBom("org.springframework.boot:spring-boot-dependencies:2.3.2.RELEASE")
+    }
+  }
+
+  sourceCompatibility = JavaVersion.VERSION_11
+
+  tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+  }
+
+  test {
+    useJUnitPlatform()
+    finalizedBy(project.tasks.jacocoTestReport)
+  }
+}
+
+clean {
+  delete "${projectDir}/build"
+}
