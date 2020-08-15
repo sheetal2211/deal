@@ -5,7 +5,10 @@ node {
     }
     post{
         always{
-            deleteDir()
+            script{
+                deleteDir()
+            }
+
         }
     }
 
