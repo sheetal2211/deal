@@ -1,7 +1,7 @@
 # Deal project
 
 <!-- 
-this project was generated with https://github.com/devs-from-matrix/basic-template-repository. 
+this project hellow was generated with https://github.com/devs-from-matrix/basic-template-repository. 
 -->
 
 ## [Documentation](https://devs-from-matrix.github.io/basic-template-repository/)
