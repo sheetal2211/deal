@@ -3,13 +3,22 @@ node {
     stage("GITCLONE"){
         checkout scm
     }
-    post{
-        always{
-            script{
-                deleteDir()
-            }
+
+     stage("build"){
+        script{
+            sh "./gradlew clean build"
 
         }
-    }
+     }
+//     post{
+//         always{
+//             script{
+//                 deleteDir()
+//             }
+//
+//         }
+//     }
+
+
 
 }
