@@ -5,7 +5,7 @@
 rootProject.name = 'deal'
 include(':domain')
 include(':domain-api')
-include(':acceptance-test')
-include(':rest-adapter')
-include(':jpa-adapter')
-include(':bootstrap')
+//include(':acceptance-test')
+//include(':rest-adapter')
+//include(':jpa-adapter')
+//include(':bootstrap')
